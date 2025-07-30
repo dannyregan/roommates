@@ -1,12 +1,14 @@
 /* 
 Author: Danny Regan
 Created: 2025-07-27
-Last Updated: 2025-07-27
+Last Updated: 2025-07-29
 Version: 0.2.0
 Description: Table creation for social media app for roommates.
 */
 
 USE `good_noodles`;
+DROP TABLE IF EXISTS POSTS;
+DROP TABLE IF EXISTS `tasks`;
 
 -- USERS
 DROP TABLE IF EXISTS `users`;
@@ -25,14 +27,25 @@ CREATE TABLE IF NOT EXISTS `users` (
     PRIMARY KEY (`user_id`)
 );
 
+-- Categories
+DROP TABLE IF EXISTS `categories`;
+CREATE TABLE IF NOT EXISTS `categories` (
+	`category_id` INT NOT NULL AUTO_INCREMENT,
+	`category` VARCHAR(50),
+    PRIMARY KEY (`category_id`)
+);
+
 -- TASKS
-DROP TABLE IF EXISTS `tasks`;
 CREATE TABLE IF NOT EXISTS `tasks` (
 	`task_id` INT NOT NULL AUTO_INCREMENT,
+	`category_id` INT,
+--     `subcategory` VARCHAR(50),
     `task` VARCHAR(225),
     `base_points` INT,
-    `multiplier` DECIMAL,
-    PRIMARY KEY (`task_id`)
+    `like_points` INT,
+    PRIMARY KEY (`task_id`),
+    FOREIGN KEY (`category_id`) REFERENCES `categories`(`category_id`)
+    -- FOREIGN KEY (`subcategory`) REFERENCES `subcategories` (`subcategory_id`)
 );
 
 -- POSTS

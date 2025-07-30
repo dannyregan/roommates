@@ -1,7 +1,7 @@
 /* 
 Author: Danny Regan
 Created: 2025-07-27
-Last Updated: 2025-07-27
+Last Updated: 2025-07-29
 Version: 0.2.0
 Description: Stored procedures for social media app for roommates.
 */
@@ -9,6 +9,7 @@ Description: Stored procedures for social media app for roommates.
 USE `good_noodles`;
 
 -- Stats for the post
+DROP PROCEDURE IF EXISTS GetPostStats;
 DELIMITER $$
 CREATE PROCEDURE GetPostStats(IN input_post_id INT)
 BEGIN
@@ -18,7 +19,7 @@ BEGIN
         t.task,
         p.comment,
         p.likes,
-        (SELECT CAST(t.base_points + (p.likes * 0.5 * t.multiplier) AS UNSIGNED) FROM posts WHERE post_id = input_post_id) AS total_points
+        (SELECT CAST(t.base_points + (p.likes * 0.5 * t.like_points) AS UNSIGNED) FROM posts WHERE post_id = input_post_id) AS total_points
 	FROM posts p
 		JOIN users u ON p.user_id = u.user_id 
 		JOIN tasks t ON p.task_id = t.task_id
@@ -29,6 +30,7 @@ DELIMITER ;
 CALL GetPostStats(5);
 
 -- Stats for the user
+DROP PROCEDURE IF EXISTS GetUserStats;
 DELIMITER $$
 CREATE PROCEDURE GetUserStats(IN input_user_id INT)
 BEGIN
@@ -56,7 +58,7 @@ BEGIN
         t.task,
         p.comment,
         p.likes,
-        CAST(t.base_points + (p.likes * 0.5 * t.multiplier) AS UNSIGNED) AS total_points
+        CAST(t.base_points + (p.likes * 0.5 * t.like_points) AS UNSIGNED) AS total_points
 	FROM posts p
 		JOIN users u ON p.user_id = u.user_id 
 		JOIN tasks t ON p.task_id = t.task_id
@@ -77,7 +79,7 @@ BEGIN
         t.task,
         p.comment,
         p.likes,
-        CAST(t.base_points + (p.likes * 0.5 * t.multiplier) AS UNSIGNED) AS total_points
+        CAST(t.base_points + (p.likes * 0.5 * t.like_points) AS UNSIGNED) AS total_points
 	FROM posts p
 		JOIN users u ON p.user_id = u.user_id 
 		JOIN tasks t ON p.task_id = t.task_id

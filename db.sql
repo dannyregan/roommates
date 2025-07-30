@@ -10,3 +10,7 @@ Description: Database for managing social media app for roommates.
 DROP DATABASE IF EXISTS `good_noodles`;
 CREATE DATABASE IF NOT EXISTS `good_noodles`;
 USE `good_noodles`;
+
+-- edit task points (hosted gatherings worth more)
+-- edit how the feed works so it pulls all appropriate info correctly
+-- add house chores tasks
