@@ -38,14 +38,15 @@ BEGIN
 		name,
 		(SELECT COUNT(*) FROM posts WHERE posts.user_id = input_user_id) AS tasks_completed,
 		points_given,
-		points_received,
+		(SELECT (SUM(t.like_points)) FROM tasks t JOIN posts p ON t.task_id = p.task_id WHERE user_id = input_user_id) AS points_received,
 		(SELECT SUM(points_given + points_received) FROM users WHERE user_id = input_user_id) AS total_points
 	FROM users
 	WHERE user_id = input_user_id;
 END$$
 DELIMITER ;
 
-CALL GetUserStats(1);
+CALL GetUserStats(2);
+SELECT * FROM USERS WHERE USER_ID = 2;
 
 -- FEED
 DROP PROCEDURE IF EXISTS Feed;
