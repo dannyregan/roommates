@@ -9,13 +9,13 @@ Description: Mock data for social media app for roommates.
 USE `good_noodles`;
 
 -- USERS
-INSERT INTO `users` (`username`, `password_hash`, `name`, `tasks_completed`, `points_given`, `points_received`)
+INSERT INTO `users` (`username`, `password_hash`, `name`)
 VALUES
-	('danny', 	'aaD43K!.<h', 	'peen', 		38, 109, 92),
-    ('tom', 	'adk82.sl:1', 	'ThomasDaTank', 33, 99, 72),
-    ('matty', 	'i203m,', 		'THEY/THEM', 	19, 89, 38),
-    ('bob', 	'0a;{]3ms', 	'Rasmodius', 	37, 101, 70),
-    ('matti', 	'#jsl5%', 		'joji', 		22, 93, 66);
+	('danny', 	'aaD43K!.<h', 	'peen' 		),
+    ('tom', 	'adk82.sl:1', 	'ThomasDaTank' ),
+    ('matty', 	'i203m,', 		'THEY/THEM'	),
+    ('bob', 	'0a;{]3ms', 	'Rasmodius'	),
+    ('matti', 	'#jsl5%', 		'joji'		);
     
 -- CATEGORIES
 INSERT INTO categories (category)
@@ -31,7 +31,8 @@ VALUES
     ('Vibes'),
     ('Productivity'), -- 10
     ('Outdoors'),
-    ('Chores') -- 12
+    ('Chores'), -- 12
+    ('Plants')
     ;
     
 -- TASKS
@@ -53,7 +54,7 @@ VALUES
     (6, 'didn\'t vape today', 4, 3),
     (7, 'socialized', 5, 2),
     (8, 'went to an event', 5, 2),
-    (8, 'got a fuckin\' raise babyyy', 50, 5),
+    (8, 'got a raaaise', 50, 5),
     (8, 'made moves and earned a promotion', 75, 5),
     (9, 'hit a blinker', 2, 2),
     (10, 'made new neural connections through 4 hours of deep work', 6, 3),
@@ -61,7 +62,7 @@ VALUES
     (7, 'hosted a gathering', 6, 3),
     (1, 'left a restaurant review for you to read', 2, 1),
     (7, 'got a roommate into a new game', 3, 2),
-    (11, 'harvested a crop irl', 15, 2),
+    (13, 'harvested a crop irl', 15, 2),
     (11, 'went for a hike', 4, 2),
     (6, 'biked to work', 4, 2),
     (12, 'took out the trash', 5, 3),
@@ -73,19 +74,28 @@ VALUES
 	(12, 'made a beverage for someone', 4, 3),
     (12, 'did yard work', 3, 2),
     (12, 'cleaned the stinky fridge', 6, 3),
-    (11, 'propagated a plant and it\'s still alive', 5, 2),
+    (13, 'propagated a plant and it\'s still alive', 5, 2),
     (6, 'meditated', 3, 1),
     (6, 'took my meds', 1, 2),
     (9, 'lit a candle', 1, 1),
-    (9, 'decorated', 3, 2)
+    (9, 'decorated', 3, 2),
+    (6, 'cut my long ass nails', 1, 1),
+    (6, 'went to therapy', 4, 4),
+    (10, 'finished a book', 6, 2),
+    (12, 'fixed something', 5, 3),
+    (13, 'watered plants', 4, 2),
+    (6, 'took 10k steps today', 5, 2)
+    
+    
+    -- tracked spending/updated personal budget, household snacks, didn't order out this week
     ;
 
 -- POSTS
 INSERT INTO posts (user_id, task_id, comment, likes)
 VALUES
-	(1, 1, 'Test test test', 3),
-    (1, 1, 'I WON', 4),
-	(2, 1, 'I\'m so good at hs.', 4),
-    (3, 1, 'Biiig win w B Chan', 4),
-    (4, 1, 'MingMing', 2),
-	(5, 1, 'New heros stink ass', 4);
+	(1, 6, 'next', 3),
+    (1, 1, 'I win', 4),
+	(2, 19, 'I\'m so high', 4),
+    (3, 15, 'Biiig win w B Chan', 4),
+    (4, 16, 'I\'m the new CEO', 2),
+	(5, 5, 'typical', 4);
