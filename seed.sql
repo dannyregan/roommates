@@ -1,7 +1,7 @@
 /* 
 Author: Danny Regan
 Created: 2025-07-27
-Last Updated: 2025-07-29
+Last Updated: 2025-08-08
 Version: 0.2.0
 Description: Mock data for social media app for roommates.
 */
@@ -84,9 +84,9 @@ VALUES
     (10, 'finished a book', 6, 2),
     (12, 'fixed something', 5, 3),
     (13, 'watered plants', 4, 2),
-    (6, 'took 10k steps today', 5, 2)
-    
-    
+    (6, 'took 10k steps today', 5, 2),
+    (8, 'got a new job', 75, 4),
+    (3, 'published a video game', 50, 3)
     -- tracked spending/updated personal budget, household snacks, didn't order out this week
     ;
 

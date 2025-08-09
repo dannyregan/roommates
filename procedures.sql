@@ -1,12 +1,56 @@
 /* 
 Author: Danny Regan
 Created: 2025-07-27
-Last Updated: 2025-07-29
+Last Updated: 2025-08-09
 Version: 0.2.0
 Description: Stored procedures for social media app for roommates.
 */
 
 USE `good_noodles`;
+
+DROP PROCEDURE IF EXISTS LikePost;
+DELIMITER $$
+CREATE PROCEDURE LikePost(IN input_post_id INT, IN input_user_id INT)
+BEGIN
+	DECLARE v_like_points INT;
+    DECLARE v_base_points INT;
+    DECLARE v_author_id INT;
+    
+    -- Get the task points and the author's ID
+    SELECT t.like_points, t.base_points, p.user_id
+    INTO v_like_points, v_base_points, v_author_id
+    FROM posts p
+		JOIN tasks t
+			ON p.task_id = t.task_id
+	WHERE p.post_id = input_post_id;
+    
+    -- The liker's points given and total points
+    UPDATE users
+    SET
+		points_given = points_given + v_like_points,
+        total_points = total_points + v_like_points
+	WHERE user_id = input_user_id;
+    
+    -- The author's points received and total points
+    UPDATE users
+    SET
+		points_received = CEIL(points_received + (v_like_points / 2)),
+        total_points    = CEIL(total_points    + (v_like_points / 2))
+	WHERE user_id = v_author_id;
+    
+    -- The post's like count and total_points
+    UPDATE posts
+    SET
+		likes = likes + 1,
+        total_points = CEIL(total_points    + (v_like_points / 2))
+	WHERE post_id = input_post_id;
+END$$
+DELIMITER ;
+
+call likepost(8, 2);
+call getpoststats(8);
+call getuserstats(1);
+call getuserstats(2);
 
 -- Stats for the post
 DROP PROCEDURE IF EXISTS GetPostStats;
@@ -36,9 +80,9 @@ CREATE PROCEDURE GetUserStats(IN input_user_id INT)
 BEGIN
 	SELECT
 		name,
-		(SELECT COUNT(*) FROM posts WHERE posts.user_id = input_user_id) AS tasks_completed,
-		points_given,
-		(SELECT (SUM(t.like_points)) FROM tasks t JOIN posts p ON t.task_id = p.task_id WHERE user_id = input_user_id) AS points_received,
+		(SELECT COUNT(*) FROM posts WHERE posts.user_id = input_user_id)  AS tasks_completed,
+		(SELECT points_given FROM users WHERE user_id = input_user_id)    AS points_given,
+		(SELECT points_received FROM users WHERE user_id = input_user_id) AS points_received,
 		(SELECT SUM(points_given + points_received) FROM users WHERE user_id = input_user_id) AS total_points
 	FROM users
 	WHERE user_id = input_user_id;
