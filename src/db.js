@@ -17,11 +17,9 @@ module.exports = pool;
 async function connect() {
     try {
         const connection = await pool.getConnection();
-        console.log("Success");
+        console.log("Connection sccessful");
         connection.release();
     } catch (error) {
         console.log(`Failed to connect: ${error}`)
     }
 }
-
-connect();
