@@ -1,13 +1,41 @@
 /* 
 Author: Danny Regan
 Created: 2025-07-27
-Last Updated: 2025-08-09
+Last Updated: 2025-08-16
 Version: 0.2.0
 Description: Stored procedures for social media app for roommates.
 */
 
 USE `good_noodles`;
 
+-- CREATE POST --
+DROP PROCEDURE IF EXISTS CreatePost;
+DELIMITER $$
+CREATE PROCEDURE CreatePost(IN input_user_id INT, IN input_task_id INT, IN input_comment VARCHAR(255))
+BEGIN
+
+	-- Input the info into posts table
+	DECLARE v_base_points INT;
+    
+	SELECT base_points
+    INTO v_base_points
+	FROM tasks
+	WHERE task_id = input_task_id;
+
+	INSERT INTO posts (user_id, task_id, comment, total_points)
+	VALUES (input_user_id, input_task_id, input_comment, v_base_points);
+    
+    -- The author's total points
+    UPDATE users
+    SET
+        total_points = total_points + v_base_points
+	WHERE user_id = input_user_id;
+END$$
+DELIMITER ;
+
+Call CreatePost(1, 25, 'Pumpkinos');
+
+-- LIKE POST --
 DROP PROCEDURE IF EXISTS LikePost;
 DELIMITER $$
 CREATE PROCEDURE LikePost(IN input_post_id INT, IN input_user_id INT)
@@ -90,7 +118,6 @@ END$$
 DELIMITER ;
 
 CALL GetUserStats(2);
-SELECT * FROM USERS WHERE USER_ID = 2;
 
 -- FEED
 DROP PROCEDURE IF EXISTS Feed;
@@ -134,32 +161,34 @@ END$$
 DELIMITER ;
 
 CALL UserFeed(1);
-
--- Create post
-DROP PROCEDURE IF EXISTS CreatePost;
-DELIMITER $$
-CREATE PROCEDURE CreatePost(
-	IN input_user_id INT,
-    IN input_task_id INT,
-    IN input_comment VARCHAR(225)
-)
-BEGIN
-	INSERT INTO posts (user_id, task_id, comment, total_points)
-    VALUES (
-		input_user_id,
-        input_task_id,
-        input_comment,
-        (SELECT base_points FROM tasks WHERE task_id = input_task_id)
-	);
-END$$
-DELIMITER ;
-
-CALL CreatePost(2, 1, 'I LOVE HEROSCAPE');
 call userfeed(2);
 call feed();
 
+-- UPDATE NAME -- 
+DROP PROCEDURE IF EXISTS UpdateName;
+DELIMITER $$
+CREATE PROCEDURE UpdateName(IN input_user_id INT, IN input_name VARCHAR(50))
+BEGIN
+	UPDATE users
+    SET name = input_name
+    WHERE user_id = input_user_id;
+END$$
+DELIMITER ;
+
+-- ADD USER --
+DROP PROCEDURE AddUser;
+DELIMITER $$
+CREATE PROCEDURE AddUser(IN input_username VARCHAR(50), IN input_password_hash VARCHAR(255), IN input_name VARCHAR(50))
+BEGIN
+	INSERT INTO users (username, password_hash, name)
+    VALUES (input_username, input_password_hash, input_name);
+END$$
+DELIMITER ;
+
+call createpost(6, 19, 'black gorilla');
+call getpoststats(8);
+call likepost(8, 3);
+select * from posts where user_id = 6;
+
+
 -- get a list of the tasks for when people hit the dropdown menu
-
--- AddLike, make sure it affects the score of the post
-
--- make sure that when a post is created, the user's points increase accordingly.

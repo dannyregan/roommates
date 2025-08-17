@@ -1,7 +1,7 @@
 /* 
 Author: Danny Regan
 Created: 2025-07-27
-Last Updated: 2025-08-08
+Last Updated: 2025-08-16
 Version: 0.2.0
 Description: Table creation for social media app for roommates.
 */
@@ -19,9 +19,9 @@ CREATE TABLE IF NOT EXISTS `users` (
     `name` VARCHAR(50) NOT NULL UNIQUE,
 	-- `following` SMALLINT DEFAULT 0,			-- +1 on follow, -1 on unfollow
 	-- `followers` SMALLINT DEFAULT 0,			-- +1 on follow, -1 on unfollow
-	 `tasks_completed` SMALLINT DEFAULT 0, 	-- VIEW USERSTATS number of posts ( count(*) posts where id = user_id )
-    `points_given` INT DEFAULT 0,			-- everytime you hit like, add the multiplier
-    `points_received` INT DEFAULT 0,		-- everytime you post, add baseline. everytime they like, add 1/2 the multiplier
+	 `tasks_completed` SMALLINT DEFAULT 0, 
+    `points_given` INT DEFAULT 0,			-- everytime you hit like, add the like_points
+    `points_received` INT DEFAULT 0,		-- everytime you post, add baseline. everytime they like, add 1/2 the like_points
 	`total_points` INT DEFAULT 0,			-- points_received + points_given
     -- `profile_pic` BLOB,
     PRIMARY KEY (`user_id`)
@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
 CREATE TABLE IF NOT EXISTS `tasks` (
 	`task_id` INT NOT NULL AUTO_INCREMENT,
 	`category_id` INT,
+    `task_name` VARCHAR(50),
 --     `subcategory` VARCHAR(50),
     `task` VARCHAR(225),
     `base_points` INT,
