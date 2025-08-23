@@ -1,5 +1,7 @@
 const pool = require('../db');
 
+
+
 async function AddUser(username, passwordHash, name) {
   const [result] = await pool.query(
     `Call good_noodles.AddUser(?, ?, ?)`,
@@ -30,6 +32,16 @@ async function UpdateName(userId, name) {
     [userId, name]
   );
   return result[0];
+}
+
+async function CheckUsername(username) {
+  const [results] = await pool.query(
+    `CALL good_noodles.CheckUserName(?, @taken);
+     SELECT @taken AS taken;`,
+    [username]
+  );
+
+  return results[1][0].taken === 0; 
 }
 
 // ============================
@@ -74,4 +86,14 @@ async function UpdateName(userId, name) {
     console.error("Error update user name:", err.message);
   }
 })//()
+;
+
+(async () => {
+  try {
+    const res = await CheckUsername('asdf');
+    console.log("Checked username: ", res);
+  } catch (err) {
+    console.error("Error checking username:", err.message);
+  }
+})()
 ;
