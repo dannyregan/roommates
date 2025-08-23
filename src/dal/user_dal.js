@@ -53,7 +53,7 @@ async function UpdateName(userId, name) {
   } catch (err) {
     console.error("Error getting user stats:", err.message);
   }
-})()
+})//()
 ;
 
 (async () => {
